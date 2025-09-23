@@ -1,0 +1,4 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(538,5): warning MSB8028: The intermediate directory (C:\DEV\Hazel\bin-int\Debug-$(Platform\$(ProjectName)\) contains files shared from another project (Hazel.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  SandboxApp.cpp
+C:\DEV\Hazel\Sandbox\src\SandboxApp.cpp(3,12): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  Sandbox.vcxproj -> C:\DEV\Hazel\bin\Debug-x64\Sandbox\Sandbox.exe

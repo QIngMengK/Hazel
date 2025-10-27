@@ -1,44 +1,44 @@
-#pragma once
-
-#include "Core.h"
 #include "hzpch.h"
-#include "Window.h"
-#include "Hazel/LayerStack.h"
-#include "Hazel/Events/Event.h"
-#include "Hazel/Events/ApplicationEvent.h"
-
-#include "Hazel/ImGui/ImGuiLayer.h"
+#include "LayerStack.h"
 
 namespace Hazel {
 
-	class HAZEL_API Application
+	LayerStack::LayerStack()
 	{
-	public:
-		Application();
-		virtual ~Application();
+	}
 
-		void Run();
+	LayerStack::~LayerStack()
+	{
+		for (Layer* layer : m_Layers)
+			delete layer;
+	}
 
-		void OnEvent(Event& e);
+	void LayerStack::PushLayer(Layer* layer)
+	{
+		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
+		m_LayerInsertIndex++;
+	}
 
-		void PushLayer(Layer* layer);
-		void PushOverlay(Layer* layer);
+	void LayerStack::PushOverlay(Layer* overlay)
+	{
+		m_Layers.emplace_back(overlay);
+	}
 
-		inline Window& GetWindow() { return *m_Window; }
+	void LayerStack::PopLayer(Layer* layer)
+	{
+		auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
+		if (it != m_Layers.end())
+		{
+			m_Layers.erase(it);
+			m_LayerInsertIndex--;
+		}
+	}
 
-		inline static Application& Get() { return *s_Instance; }
-	private:
-		bool OnWindowClose(WindowCloseEvent& e);
-
-		std::unique_ptr<Window> m_Window;
-		ImGuiLayer* m_ImGuiLayer;
-		bool m_Running = true;
-		LayerStack m_LayerStack;
-	private:
-		static Application* s_Instance;
-	};
-
-	// To be defined in CLIENT
-	Application* CreateApplication();
+	void LayerStack::PopOverlay(Layer* overlay)
+	{
+		auto it = std::find(m_Layers.begin(), m_Layers.end(), overlay);
+		if (it != m_Layers.end())
+			m_Layers.erase(it);
+	}
 
 }
